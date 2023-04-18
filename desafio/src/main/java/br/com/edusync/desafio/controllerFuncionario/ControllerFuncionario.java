@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -26,8 +27,10 @@ public class ControllerFuncionario {
     public ResponseEntity contratarFuncionario (@RequestBody ModelsFuncionario funcionario,
         @RequestParam String cnpj){
         try{
-            funcionario.setRestaurante(serviceRestaurante.buscarPorCnpj(cnpj));
+            ModelsRestaurante restaurante = serviceRestaurante.buscarPorCnpj(cnpj);
             serviceFuncionario.contratarFuncionario(funcionario);
+            funcionario.setRestaurante(serviceRestaurante.buscarPorCnpj(cnpj));
+            restaurante.getModelsFuncionarios().add(funcionario);
             return new ResponseEntity<>(funcionario, HttpStatus.CREATED);
         }catch (HttpMessageNotReadableException e){
             return new ResponseEntity<>("Erro: Faltam informações ao cadastro" ,HttpStatus.OK);

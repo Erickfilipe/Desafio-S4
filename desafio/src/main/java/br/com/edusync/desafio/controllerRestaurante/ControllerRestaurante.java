@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 @RequestMapping(value = "/restaurantes")
@@ -20,7 +22,9 @@ public class ControllerRestaurante {
     @PostMapping(value = "/novo")
     public ResponseEntity abrirNovoRestaurante (@RequestBody ModelsRestaurante restaurante) {
         try {
-            serviceRestaurante.abrirNovoRestaurante(restaurante);
+            ModelsRestaurante r = new ModelsRestaurante("1","leo", LocalDate.parse("2009-08-20"),
+                    "Como coracao de mae", new ArrayList<>());
+            serviceRestaurante.abrirNovoRestaurante(r);
             return new ResponseEntity<>(restaurante, HttpStatus.CREATED);
         }catch (HttpMessageNotReadableException e){
             return new ResponseEntity<>("Faltam informações ao cadastro" ,HttpStatus.OK);
